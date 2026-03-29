@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calc-X Elite | Colorful Marks Calculator</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Vibrant colorful palette */
+            --bg-deep: #0f0c29;
+            --gradient-bg: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --accent-purple: #c084fc;
+            --accent-pink: #f472b6;
+            --accent-blue: #38bdf8;
+            --accent-cyan: #22d3ee;
+            --accent-orange: #fb923c;
+            --card-glass: rgba(15, 20, 35, 0.65);
+            --text-bright: #ffffff;
+            --text-dim: #cbd5e1;
+            --success: #34d399;
+            --error: #fb7185;
+            --focus-glow: rgba(56, 189, 248, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-deep);
+            color: var(--text-bright);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* --- Colorful Animated Background --- */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+            background: var(--gradient-bg);
+            pointer-events: none;
+        }
+
+        .color-blob {
+            position: absolute;
+            width: 60vw;
+            height: 60vw;
+            max-width: 600px;
+            max-height: 600px;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.4;
+            animation: floatBlobs 20s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+
+        .blob-1 { background: radial-gradient(circle, var(--accent-pink), transparent 60%); top: -10%; left: -10%; animation-delay: 0s; }
+        .blob-2 { background: radial-gradient(circle, var(--accent-cyan), transparent 60%); bottom: -20%; right: -10%; animation-delay: -5s; animation-direction: alternate-reverse; }
+        .blob-3 { background: radial-gradient(circle, var(--accent-purple), transparent 60%); top: 40%; left: 30%; animation-delay: -10s; opacity: 0.3; }
+        .blob-4 { background: radial-gradient(circle, var(--accent-orange), transparent 60%); top: 10%; right: 10%; animation-delay: -15s; opacity: 0.2; }
+
+        @keyframes floatBlobs {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate(10%, 15%) scale(1.1) rotate(45deg); }
+            100% { transform: translate(-5%, -10%) scale(0.9) rotate(-15deg); }
+        }
+
+        /* --- Floating Academic Elements --- */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-item {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.4);
+            animation: floatAnim var(--duration) infinite ease-in-out;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            pointer-events: none;
+        }
+
+        @keyframes floatAnim {
+            0%, 100% { transform: translateY(0) rotate(-10deg); }
+            50% { transform: translateY(-40px) rotate(20deg); }
+        }
+
+        /* --- Main Container & Card --- */
+        .main-container {
+            width: 100%;
+            max-width: 500px;
+            z-index: 10;
+            perspective: 1000px;
+            margin: auto;
+        }
+
+        .glass-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.5), 
+                        inset 0 1px 20px rgba(255, 255, 255, 0.05);
+            animation: cardEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(60px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .title-section {
+            text-align: center;
+            margin-bottom: 35px;
+            animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+        }
+
+        .title-section h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-cyan), var(--accent-purple));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1.5px;
+            animation: gradientText 5s ease infinite;
+        }
+
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .title-section p {
+            color: var(--text-dim);
+            font-weight: 500;
+            margin-top: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Form Elements & Validation --- */
+        .input-grid {
+            display: grid;
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+        }
+
+        .input-wrapper:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-wrapper label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+            margin-left: 5px;
+            transition: color 0.4s ease;
+        }
+
+        .field-container {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 18px 20px;
+            padding-right: 45px; /* space for icon */
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 500;
+            outline: none;
+            /* Using CSS transitions for smooth validation changes */
+            transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease, transform 0.4s ease;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+            /* Ensure the element never disappears during repaints */
+            visibility: visible !important;
+            display: block !important;
+            opacity: 1 !important;
+        }
+
+        /* Focus Animation */
+        input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 25px var(--focus-glow), inset 0 2px 10px rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .input-wrapper:focus-within label {
+            color: var(--accent-cyan);
+        }
+
+        /* Validation States - Pure CSS Transitions (No JS flickering) */
+        .input-wrapper.valid input {
+            border-color: var(--success);
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+        }
+
+        .input-wrapper.invalid input {
+            border-color: var(--error);
+            box-shadow: 0 0 20px rgba(251, 113, 133, 0.3);
+        }
+
+        /* Subtle Shake for invalid input (when button clicked) */
+        .input-wrapper.invalid-shake input {
+            animation: errorTremble 0.4s ease-in-out;
+        }
+
+        @keyframes errorTremble {
+            0%, 100% { transform: translateY(-2px) translateX(0); }
+            25% { transform: translateY(-2px) translateX(-4px); }
+            75% { transform: translateY(-2px) translateX(4px); }
+        }
+
+        /* Status Icon - smoothly scales in/out */
+        .status-icon {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%) scale(0);
+            font-size: 1.2rem;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .input-wrapper.valid .status-icon.check {
+            transform: translateY(-50%) scale(1);
+            opacity: 1;
+            color: var(--success);
+        }
+
+        .input-wrapper.invalid .status-icon.cross {
+            transform: translateY(-50%) scale(1);
+            opacity: 1;
+            color: var(--error);
+        }
+
+        /* Smooth Error Label */
+        .error-msg {
+            color: var(--error);
+            font-size: 0.75rem;
+            position: absolute;
+            bottom: -22px;
+            left: 5px;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(-5px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .input-wrapper.invalid .error-msg {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Button */
+        .btn-check {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 10px;
+            box-shadow: 0 15px 35px rgba(192, 132, 252, 0.4);
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both, gradientBtn 3s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBtn {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Button Shine Effect */
+        .btn-check::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .btn-check:hover::after {
+            left: 150%;
+        }
+
+        .btn-check:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 25px 50px rgba(192, 132, 252, 0.6);
+            letter-spacing: 3px;
+        }
+
+        .btn-check:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0 10px 20px rgba(192, 132, 252, 0.4);
+        }
+
+        /* --- Results Section --- */
+        .results-area {
+            display: none;
+            margin-top: 45px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.2);
+            padding-top: 35px;
+            animation: resultReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform-origin: top;
+        }
+
+        @keyframes resultReveal {
+            from { opacity: 0; transform: scaleY(0.8) translateY(-20px); }
+            to { opacity: 1; transform: scaleY(1) translateY(0); }
+        }
+
+        .hero-score {
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .hero-score .val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(to right, #fff, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(244, 114, 182, 0.5);
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from { text-shadow: 0 0 20px rgba(244, 114, 182, 0.4); }
+            to { text-shadow: 0 0 50px rgba(34, 211, 238, 0.8); }
+        }
+
+        .hero-score .lbl {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-top: 12px;
+            letter-spacing: 2px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 20px 15px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            animation: statPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+        }
+
+        .stat-box:nth-child(1) { animation-delay: 0.1s; }
+        .stat-box:nth-child(2) { animation-delay: 0.2s; }
+        .stat-box:nth-child(3) { animation-delay: 0.3s; }
+        .stat-box:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes statPop {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, rgba(255,255,255,0.1), transparent);
+            pointer-events: none;
+        }
+        
+        .stat-box:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .stat-box .v {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .stat-box .l {
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            opacity: 0.8;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            font-weight: 500;
+            animation: fadeIn 1s ease 1s both;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            .glass-card { padding: 35px 25px; }
+            .title-section h1 { font-size: 2.4rem; }
+            .hero-score .val { font-size: 4rem; }
+            .stat-box .v { font-size: 1.5rem; }
+            .stat-box { padding: 15px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-container">
+        <div class="color-blob blob-1"></div>
+        <div class="color-blob blob-2"></div>
+        <div class="color-blob blob-3"></div>
+        <div class="color-blob blob-4"></div>
+    </div>
+
+    <!-- Floating Academic Icons -->
+    <div class="floating-elements" id="floatingIcons"></div>
+
+    <div class="main-container">
+        <header class="title-section">
+            <p>Academic Intelligence</p>
+            <h1>CALC-X ELITE</h1>
+        </header>
+
+        <main class="glass-card">
+            <div class="input-grid">
+                <div class="input-wrapper" id="wrap1">
+                    <label>MID EXAM 1 (0-30)</label>
+                    <div class="field-container">
+                        <input type="number" id="mid1" placeholder="Enter marks..." min="0" max="30" step="0.5">
+                        <span class="status-icon check">✔️</span>
+                        <span class="status-icon cross">❌</span>
+                        <div class="error-msg">⚠️ Invalid mark! Enter 0 to 30.</div>
+                    </div>
+                </div>
+
+                <div class="input-wrapper" id="wrap2">
+                    <label>MID EXAM 2 (0-30)</label>
+                    <div class="field-container">
+                        <input type="number" id="mid2" placeholder="Enter marks..." min="0" max="30" step="0.5">
+                        <span class="status-icon check">✔️</span>
+                        <span class="status-icon cross">❌</span>
+                        <div class="error-msg">⚠️ Invalid mark! Enter 0 to 30.</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-check" id="checkBtn">CHECK AVERAGE</button>
+
+            <section class="results-area" id="results">
+                <div class="hero-score">
+                    <div class="val" id="finalInternal">0</div>
+                    <div class="lbl">Total Internal (Out of 30)</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="v" id="highVal">0</span>
+                        <span class="l">Higher Mid</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="v" id="lowVal">0</span>
+                        <span class="l">Lower Mid</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="v" id="highWeightVal">0</span>
+                        <span class="l">80% Weighted</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="v" id="lowWeightVal">0</span>
+                        <span class="l">20% Weighted</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            &copy; 2026 ELITE ACADEMICS &bull; ANIMATED
+        </footer>
+    </div>
+
+    <script>
+        // Floating Background Icons
+        const icons = ['📖', '🎓', '✏️', '🧮', '📈', '%', '✨', '⚡', '💡', '📓'];
+        function createFloatingIcons() {
+            const container = document.getElementById('floatingIcons');
+            const count = 20;
+
+            for (let i = 0; i < count; i++) {
+                const item = document.createElement('div');
+                item.className = 'floating-item';
+                item.innerText = icons[Math.floor(Math.random() * icons.length)];
+                
+                const size = Math.random() * 25 + 15;
+                item.style.fontSize = `${size}px`;
+                item.style.left = `${Math.random() * 100}%`;
+                item.style.top = `${Math.random() * 100}%`;
+                item.style.setProperty('--duration', `${Math.random() * 15 + 10}s`);
+                item.style.animationDelay = `-${Math.random() * 20}s`;
+                item.style.opacity = Math.random() * 0.3 + 0.1;
+                
+                container.appendChild(item);
+            }
+        }
+        createFloatingIcons();
+
+        // Real-time Input Validation Formatting ensuring perfectly smooth transitions
+        const inputs = [
+            { el: document.getElementById('mid1'), wrap: document.getElementById('wrap1') },
+            { el: document.getElementById('mid2'), wrap: document.getElementById('wrap2') }
+        ];
+
+        // Ensure we rely only on the browser's CSS transition engine for visual changes
+        inputs.forEach(obj => {
+            const { el, wrap } = obj;
+            
+            const validate = () => {
+                const val = parseFloat(el.value);
+                
+                if (el.value.trim() === '') {
+                    // Empty input should not show errors or success
+                    wrap.classList.remove('valid', 'invalid', 'invalid-shake');
+                    return;
+                }
+
+                if (!isNaN(val) && val >= 0 && val <= 30) {
+                    // Valid format
+                    wrap.classList.add('valid');
+                    wrap.classList.remove('invalid', 'invalid-shake');
+                } else {
+                    // Invalid format
+                    wrap.classList.add('invalid');
+                    wrap.classList.remove('valid');
+                }
+            };
+
+            el.addEventListener('input', validate);
+            el.addEventListener('blur', validate);
+        });
+
+        // Calculate Logic
+        const checkBtn = document.getElementById('checkBtn');
+        const results = document.getElementById('results');
+
+        function animateNumber(id, endValue) {
+            const element = document.getElementById(id);
+            let start = null;
+            const duration = 1200; // slightly longer, smoother animation
+            const step = (timestamp) => {
+                if (!start) start = timestamp;
+                const progress = Math.min((timestamp - start) / duration, 1);
+                // easeOutExpo for very smooth ending
+                const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                const current = (easeOut * endValue).toFixed(2);
+                
+                element.innerText = (progress === 1 && endValue % 1 === 0) ? Math.floor(endValue) : current;
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        checkBtn.addEventListener('click', () => {
+            let formValid = true;
+
+            // Validate all inputs forcefully on click
+            inputs.forEach(obj => {
+                const { el, wrap } = obj;
+                const val = parseFloat(el.value);
+                
+                if (el.value.trim() === '' || isNaN(val) || val < 0 || val > 30) {
+                    wrap.classList.add('invalid');
+                    wrap.classList.remove('valid');
+                    
+                    // Add shake class specifically on button click for invalid fields
+                    wrap.classList.remove('invalid-shake');
+                    // Force a micro-task repaint so the shake can re-trigger without resetting the field entirely
+                    void wrap.offsetWidth; 
+                    wrap.classList.add('invalid-shake');
+                    
+                    formValid = false;
+                } else {
+                    wrap.classList.add('valid');
+                    wrap.classList.remove('invalid', 'invalid-shake');
+                }
+            });
+
+            if (!formValid) {
+                // Shake the button lightly if invalid
+                checkBtn.style.transform = "translateX(-5px)";
+                setTimeout(() => checkBtn.style.transform = "translateX(5px)", 100);
+                setTimeout(() => checkBtn.style.transform = "translateX(0)", 200);
+                return;
+            }
+
+            // Calculation
+            const m1 = parseFloat(inputs[0].el.value);
+            const m2 = parseFloat(inputs[1].el.value);
+
+            const high = Math.max(m1, m2);
+            const low = Math.min(m1, m2);
+            const hw = high * 0.8;
+            const lw = low * 0.2;
+            const internal = hw + lw;
+
+            // Smooth reveal animation handling
+            results.style.animation = 'none';
+            void results.offsetWidth; // force reflow (for the result section, safe and isolated)
+            results.style.animation = null;
+
+            results.style.display = 'block';
+            
+            // Re-trigger stats box pop animations
+            const statBoxes = document.querySelectorAll('.stat-box');
+            statBoxes.forEach(box => {
+                box.style.animation = 'none';
+                void box.offsetWidth;
+                box.style.animation = null;
+            });
+
+            // Start number animations
+            animateNumber('finalInternal', internal);
+            animateNumber('highVal', high);
+            animateNumber('lowVal', low);
+            animateNumber('highWeightVal', hw);
+            animateNumber('lowWeightVal', lw);
+
+            setTimeout(() => {
+                window.scrollBy({ top: 300, behavior: 'smooth' });
+            }, 100);
+        });
+    </script>
+</body>
+</html>
