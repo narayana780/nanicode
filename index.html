@@ -480,6 +480,101 @@
             animation: fadeIn 1s ease 1s both;
         }
 
+        /* --- Strategy Panel --- */
+        .btn-strategy {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--text-bright);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2), inset 0 1px 10px rgba(255,255,255,0.1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-strategy:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+            border-color: var(--accent-orange);
+            box-shadow: 0 10px 25px rgba(251, 146, 60, 0.3);
+            color: #fff;
+        }
+        .top-action-bar {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .strategy-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 12, 41, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            padding: 20px;
+        }
+        .strategy-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .strategy-card {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            transform: translateY(50px) scale(0.95);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+            opacity: 0;
+            margin: 0;
+        }
+
+        .strategy-overlay.active .strategy-card {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        .close-btn:hover {
+            background: var(--error);
+            border-color: var(--error);
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 0 15px rgba(251, 113, 133, 0.5);
+        }
+
         /* Mobile Adjustments */
         @media (max-width: 480px) {
             .glass-card { padding: 35px 25px; }
@@ -498,10 +593,54 @@
         <div class="color-blob blob-4"></div>
     </div>
 
+    <div class="strategy-overlay" id="strategyOverlay">
+        <div class="glass-card strategy-card">
+            <button class="close-btn" id="closeStrategyBtn">✖</button>
+            <div class="title-section" style="margin-bottom: 25px;">
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Strategy Plan</h2>
+                <p>Maintain your 15.00 Average</p>
+            </div>
+
+            <div class="input-grid" style="grid-template-columns: 1fr; margin-bottom: 25px;">
+                <div class="input-wrapper" id="stratWrap1">
+                    <label>Mid 1 Marks (out of 30)</label>
+                    <div class="field-container">
+                        <input type="number" id="stratMid1" placeholder="Enter Mid 1 marks..." min="0" max="30" step="0.5">
+                        <span class="status-icon check">✔️</span>
+                        <span class="status-icon cross">❌</span>
+                        <div class="error-msg">⚠️ Invalid mark! Enter 0 to 30.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-result" id="strategyResult" style="display: none; margin-top: 25px; border-top: 1px dashed rgba(255, 255, 255, 0.2); padding-top: 25px;">
+                <div class="stats-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 20px;">
+                    <div class="stat-box" style="animation: none; transform: none; opacity: 1;">
+                        <span class="v" id="stratEnteredMid1" style="font-size: 1.5rem;">0</span>
+                        <span class="l">Mid 1 Marks (out of 30)</span>
+                    </div>
+                    <div class="stat-box" style="animation: none; transform: none; opacity: 1;">
+                        <span class="v" style="font-size: 1.5rem; color: var(--accent-orange);">15.00</span>
+                        <span class="l">Minimum Average Required</span>
+                    </div>
+                </div>
+                <div class="hero-score" style="margin-bottom: 20px;">
+                    <div class="val" id="stratNeeded" style="font-size: 3.5rem; color: var(--accent-cyan); text-shadow: 0 0 20px rgba(34, 211, 238, 0.4); background: none; -webkit-text-fill-color: var(--accent-cyan);">0</div>
+                    <div class="lbl">Mid 2 Marks Needed (out of 30)</div>
+                </div>
+                <div id="stratStatus" style="text-align: center; margin-top: 15px; font-size: 1rem; font-weight: 500; word-break: break-word; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.05); color: var(--text-bright);">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Floating Academic Icons -->
     <div class="floating-elements" id="floatingIcons"></div>
 
     <div class="main-container">
+        <div class="top-action-bar">
+            <button class="btn-strategy" id="openStrategyBtn">🎯 Open Strategy Plan</button>
+        </div>
         <header class="title-section">
             <p>Academic Intelligence</p>
             <h1>CALC-X ELITE</h1>
@@ -716,6 +855,88 @@
                 window.scrollBy({ top: 300, behavior: 'smooth' });
             }, 100);
         });
+
+        // Strategy Planner Logic
+        const openStrategyBtn = document.getElementById('openStrategyBtn');
+        const closeStrategyBtn = document.getElementById('closeStrategyBtn');
+        const strategyOverlay = document.getElementById('strategyOverlay');
+        const stratMid1 = document.getElementById('stratMid1');
+        const stratWrap1 = document.getElementById('stratWrap1');
+        const strategyResult = document.getElementById('strategyResult');
+        const stratNeeded = document.getElementById('stratNeeded');
+        const stratStatus = document.getElementById('stratStatus');
+        const stratEnteredMid1 = document.getElementById('stratEnteredMid1');
+
+        openStrategyBtn.addEventListener('click', () => {
+            strategyOverlay.classList.add('active');
+            setTimeout(() => stratMid1.focus(), 100);
+        });
+
+        closeStrategyBtn.addEventListener('click', () => {
+            strategyOverlay.classList.remove('active');
+        });
+
+        strategyOverlay.addEventListener('click', (e) => {
+            if (e.target === strategyOverlay) {
+                strategyOverlay.classList.remove('active');
+            }
+        });
+
+        const validateStrategy = () => {
+            const val = parseFloat(stratMid1.value);
+            
+            if (stratMid1.value.trim() === '') {
+                stratWrap1.classList.remove('valid', 'invalid');
+                strategyResult.style.display = 'none';
+                return;
+            }
+
+            if (!isNaN(val) && val >= 0 && val <= 30) {
+                stratWrap1.classList.add('valid');
+                stratWrap1.classList.remove('invalid');
+                
+                // Calculate
+                const targetAvg = 15;
+                const neededMid2 = (targetAvg * 2) - val;
+                
+                stratEnteredMid1.innerText = val;
+                
+                strategyResult.style.display = 'block';
+                strategyResult.style.animation = 'none';
+                void strategyResult.offsetWidth; // Reflow
+                strategyResult.style.animation = 'resultReveal 0.6s forwards';
+                
+                if (neededMid2 <= 0) {
+                    stratNeeded.innerText = "0";
+                    stratNeeded.style.color = "var(--success)";
+                    stratNeeded.style.webkitTextFillColor = "var(--success)";
+                    stratNeeded.style.textShadow = "0 0 20px rgba(52, 211, 153, 0.4)";
+                    stratStatus.innerText = "You are already above the minimum average. Even 0 in Mid 2 will maintain 15.00 average.";
+                    stratStatus.style.borderLeft = "4px solid var(--success)";
+                } else if (neededMid2 > 30) {
+                    stratNeeded.innerText = neededMid2;
+                    stratNeeded.style.color = "var(--error)";
+                    stratNeeded.style.webkitTextFillColor = "var(--error)";
+                    stratNeeded.style.textShadow = "0 0 20px rgba(251, 113, 133, 0.4)";
+                    stratStatus.innerText = "It is not possible to maintain the minimum average of 15.00 with Mid 2 alone.";
+                    stratStatus.style.borderLeft = "4px solid var(--error)";
+                } else {
+                    stratNeeded.innerText = neededMid2;
+                    stratNeeded.style.color = "var(--accent-cyan)";
+                    stratNeeded.style.webkitTextFillColor = "var(--accent-cyan)";
+                    stratNeeded.style.textShadow = "0 0 20px rgba(34, 211, 238, 0.4)";
+                    stratStatus.innerText = "You need " + neededMid2 + " marks in Mid 2 out of 30 to maintain the minimum average of 15.00.";
+                    stratStatus.style.borderLeft = "4px solid var(--accent-cyan)";
+                }
+            } else {
+                stratWrap1.classList.add('invalid');
+                stratWrap1.classList.remove('valid');
+                strategyResult.style.display = 'none';
+            }
+        };
+
+        stratMid1.addEventListener('input', validateStrategy);
+        stratMid1.addEventListener('blur', validateStrategy);
     </script>
 </body>
 </html>
